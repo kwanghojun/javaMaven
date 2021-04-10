@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.testMapper">
+  <select id="selectLowData" resultType="java.util.Map">
+    select seq as numseq,grp_id,col1,col2,col3,etc,bigo,regdt from test_low_data
+  </select>
+  <update id="seqInit" parameterType="java.util.Map">
+  		ALTER SEQUENCE TEST_SEQ INCREMENT BY 1
+  </update>
+  <insert id="insertLowData" parameterType="java.util.Map">
+  	<selectKey resultType="int" keyProperty="seqColumn" order="BEFORE">
+		select TEST_SEQ.NEXTVAL from dual
+	</selectKey>
+    insert into test_low_data(seq,grp_id,col1,col2,col3,etc,bigo,regdt)
+        values(
+	    	#{seqColumn},
+	    	#{grp_id},
+	    	#{col1},
+	    	#{col2},
+	    	#{col3},
+	    	#{etc},
+	    	#{bigo},
+	    	sysdate
+	    )
+  </insert> 
+  <delete id="deleteLowData" parameterType="java.util.Map">
+    delete from test_low_data where to_char(regdt,'YYYYMMDD')=#{regdt}
+  </delete>
+</mapper>

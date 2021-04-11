@@ -20,7 +20,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class ExecutorTest {
 	
 	public static void main(String[] args) {
-		int maxLoop=1;
+		int maxLoop=3;
 		Long seq=Long.valueOf(0);
 
 		LocalDateTime startTime=LocalDateTime.now();
@@ -30,21 +30,9 @@ public class ExecutorTest {
 			Map param=new HashMap();
 			param.put("regdt","20210410");
 			tdao.deleteData(param);
-			makeRandomChar random=new makeRandomChar();
 			while(maxLoop > 0) {
 				log("maxLoop==["+maxLoop+"]");
-				ParallelExecutorService paralExecutor=new ParallelExecutorService(seq);
-				List<String> jobList = List.of("job1","job2","job3");
-				int loopThread=3;
-				for(int i=0; i < loopThread;i++) {
-					int setIdx=i+1;
-					paralExecutor.submit("job"+random.getRandomIdx2(3)); 
-				}
-				for (int i = 0 ; i < loopThread; i++) {
-			            String result = paralExecutor.take();
-			            System.out.println("Thread Take..["+result+"]");
-			    }
-				paralExecutor.close();
+				subProcess1(seq);
 				maxLoop--;
 			}
 		} catch(Exception e) {
@@ -57,9 +45,35 @@ public class ExecutorTest {
 		long chaMinu=chaSecond/60;
 		long chaHour=chaMinu/60;
 		chaSecond=chaSecond % 60;
-		System.out.println("######### 쇼이시간..["+chaHour+"] 시...["+chaMinu+"] 분...["+chaSecond+"] 초 #############");
+		System.out.println("######### 소요시간..["+chaHour+"] 시...["+chaMinu+"] 분...["+chaSecond+"] 초 #############");
 	}
 	
+	
+	public static void subProcess1(Long seq) {
+		makeRandomChar random=new makeRandomChar();
+		ParallelExecutorService paralExecutor=new ParallelExecutorService(seq);
+		List<String> jobList = List.of("job1","job2","job3");
+		int loopThread=3;
+		for(int i=0; i < loopThread;i++) {
+			int setIdx=i+1;
+			paralExecutor.submit("job"+random.getRandomIdx2(3)); 
+		}
+		for (int i = 0 ; i < loopThread; i++) {
+	            String result = paralExecutor.take();
+	            System.out.println("Thread Take..["+result+"]");
+	    }
+		paralExecutor.close();
+	}
+	
+	public static void subProcess2(Long seq) {
+		makeRandomChar random=new makeRandomChar();
+		ParallelExecutorService paralExecutor=new ParallelExecutorService(seq);
+		List<String> jobList = List.of("job1","job2","job3");
+		int loopJob=3;
+		for(int i=0; i < loopJob;i++) {
+			paralExecutor.nomalProecss("job"+random.getRandomIdx2(3)); 
+		}
+	}
 	
 	public static void log(String getMsg) {
 		System.out.println(getMsg);

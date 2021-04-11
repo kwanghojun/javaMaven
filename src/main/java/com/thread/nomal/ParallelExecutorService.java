@@ -55,6 +55,38 @@ public class ParallelExecutorService {
 		});
 	}
 	
+	
+	public void nomalProecss(String jobName) {
+		if(jobName.equals("job1")) {
+			try {
+				log("--job1..Start..");
+				JobInterFace int1 =new jobImple1();
+				int1.daoInsert(seq);
+				log("--job1..End..");
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else if(jobName.equals("job2")) {
+			try {
+				log("--job2..Start..");
+				JobInterFace int2 =new jobImple2();
+				int2.daoInsert(seq);
+				log("job2..End.");
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else if(jobName.equals("job3")) {
+			try {
+				log("--job3..Start..");
+				JobInterFace int3 =new jobImple3();
+				int3.daoInsert(seq);
+				log("--job3..End..");
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} 
+	}
+	
 	public String take() {
 		try {
 			return queue.take();

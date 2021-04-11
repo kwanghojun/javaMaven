@@ -15,7 +15,7 @@ public class jobImple1 implements JobInterFace{
 	public void daoInsert(Long idx) {
 		log("Job1","...Method1..");
 		testDao dao=new testDao();
-		for(int i=0; i < 500;i++) {
+		for(int i=0; i < 1000;i++) {
 			idx.valueOf(idx.longValue()+1);
 			dao.insertData(new HashMap(), idx.intValue());
 		}

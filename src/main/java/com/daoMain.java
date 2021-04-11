@@ -12,13 +12,12 @@ public abstract class daoMain {
 	protected String resource = "mybatis/mybatis-config.xml";
 	protected SqlSessionFactory sqlSessionFactory;
 	protected SqlSession sqlSession;
-	public void Init() {
+	public daoMain() {
 		daoInit();
 	}
 	
 	public  void daoInit() {
-		log("daoMain..");
-		
+		log("daoInit..");
 		try {
 			log("sqlSessionFactory..["+sqlSessionFactory+"]");
 			log("sqlSession..["+sqlSession+"]");

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 public class ExecutorTest {
+	
 	public static void main(String[] args) {
 		int maxLoop=1;
 		Long seq=Long.valueOf(0);
@@ -27,19 +28,19 @@ public class ExecutorTest {
 			testDao tdao=new testDao();
 			tdao.seqInit(new HashMap());
 			Map param=new HashMap();
-			param.put("regdt","20210409");
+			param.put("regdt","20210410");
 			tdao.deleteData(param);
 			makeRandomChar random=new makeRandomChar();
 			while(maxLoop > 0) {
 				log("maxLoop==["+maxLoop+"]");
 				ParallelExecutorService paralExecutor=new ParallelExecutorService(seq);
 				List<String> jobList = List.of("job1","job2","job3");
-				for(int i=0; i < 24;i++) {
+				int loopThread=3;
+				for(int i=0; i < loopThread;i++) {
 					int setIdx=i+1;
 					paralExecutor.submit("job"+random.getRandomIdx2(3)); 
 				}
-				log("last Seq==["+seq+"]");
-				for (int i = 0 ; i < 24; i++) {
+				for (int i = 0 ; i < loopThread; i++) {
 			            String result = paralExecutor.take();
 			            System.out.println("Thread Take..["+result+"]");
 			    }
@@ -56,78 +57,9 @@ public class ExecutorTest {
 		long chaMinu=chaSecond/60;
 		long chaHour=chaMinu/60;
 		chaSecond=chaSecond % 60;
-		System.out.println("######### 쇼이시간..["+chaHour+"] 시...["+chaMinu+"] 분...["+chaMinu+"] 초 #############");
+		System.out.println("######### 쇼이시간..["+chaHour+"] 시...["+chaMinu+"] 분...["+chaSecond+"] 초 #############");
 	}
 	
-	
-	private static class ParallelExecutorService {
-		private final int maxCore=Runtime.getRuntime().availableProcessors();
-		private final ExecutorService executor = Executors.newFixedThreadPool(maxCore);
-		private final BlockingQueue<String> queue = new ArrayBlockingQueue<>(20);
-		private Long seq;
-		public ParallelExecutorService(Long seq) {
-			this.seq=seq;
-		}
-		
-		public void submit(String jobName) {
-			log("jobName..["+jobName+"]");
-			log("Que Size..["+queue.size()+"]");
-			executor.submit(() -> {
-				String threadName=Thread.currentThread().getName();
-				if(jobName.equals("job1")) {
-					try {
-						log("--job1..Start..["+threadName+"]");
-						JobInterFace int1 =new jobImple1();
-						int1.daoInsert(seq);
-						log("--job1..End..["+threadName+"]");
-						queue.put(jobName+" : Queue");
-					} catch(Exception e) {
-						e.printStackTrace();
-					}
-				} else if(jobName.equals("job2")) {
-					try {
-						log("--job2..Start..["+threadName+"]");
-						JobInterFace int2 =new jobImple2();
-						int2.daoInsert(seq);
-						log("job2..End..["+threadName+"]");
-						queue.put(jobName+" : Queue");
-					} catch(Exception e) {
-						e.printStackTrace();
-					}
-				} else if(jobName.equals("job3")) {
-					try {
-						log("--job3..Start..["+threadName+"]");
-						JobInterFace int3 =new jobImple3();
-						int3.daoInsert(seq);
-						log("--job3..End..["+threadName+"]");
-						queue.put(jobName+" : Queue");
-					} catch(Exception e) {
-						e.printStackTrace();
-					}
-				} 
-			});
-		}
-		
-		public String take() {
-			try {
-				return queue.take();
-			} catch(Exception e) {
-				e.printStackTrace();
-				throw new IllegalStateException(e);
-			}
-		}
-		
-		public void close() {
-			List<Runnable> unfinishedTasks = executor.shutdownNow();
-			if(!unfinishedTasks.isEmpty()) {
-				System.out.println("��� ������� ����.");
-			}
-		}
-		
-		
-		
-		
-	}	
 	
 	public static void log(String getMsg) {
 		System.out.println(getMsg);

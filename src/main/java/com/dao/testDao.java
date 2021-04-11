@@ -13,17 +13,12 @@ public class testDao extends daoMain{
 	String[] grupCode= {"groupId1","groupId2","groupid3"};
 	
 	public testDao() {
-		log("testDao..");
-		super.Init();
 	}
 	public void dataSelect() {
 		try {
 			List<Map> list=sqlSession.selectList("mybatis.testMapper.selectLowData");
-			log("list111..End..");
 			List<Map> list1=sqlSession.selectList("mybatis.testMapper.selectLowData");
-			log("list222..End..");
 			List<Map> list2=sqlSession.selectList("mybatis.testMapper.selectLowData");
-			log("list333..End..");
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {

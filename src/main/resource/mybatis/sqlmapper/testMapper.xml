@@ -26,6 +26,6 @@
 	    )
   </insert> 
   <delete id="deleteLowData" parameterType="java.util.Map">
-    delete from test_low_data where to_char(regdt,'YYYYMMDD')=#{regdt}
+    delete from test_low_data where to_char(regdt,'YYYYMM') like #{regdt}
   </delete>
 </mapper>

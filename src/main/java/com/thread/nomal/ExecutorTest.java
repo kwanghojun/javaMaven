@@ -28,7 +28,7 @@ public class ExecutorTest {
 			testDao tdao=new testDao();
 			tdao.seqInit(new HashMap());
 			Map param=new HashMap();
-			param.put("regdt","20210410");
+			param.put("regdt","202104");
 			tdao.deleteData(param);
 			while(maxLoop > 0) {
 				log("maxLoop==["+maxLoop+"]");

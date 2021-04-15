@@ -60,6 +60,8 @@ public class testDao extends daoMain{
 			
 	public static void main(String[] args) {
 		System.out.println("delete....Start....!");
+		Map delParam=new HashMap();
+		delParam.put("regdt", "202104");
 		test.deleteData(new HashMap());
 		System.out.println("inset....Start....!");
 		for(int i=0; i < 300000;i++) {

@@ -30,17 +30,17 @@ public class DbConfiguration {
 
     @Primary
     @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionProductFactory(@Qualifier("dbDatasource") DataSource datasorce, ApplicationContext applicationContext) throws Exception {
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dbDatasource") DataSource datasorce, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(datasorce);
-        factoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mybatis-config2.xml"));
+        //factoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
         factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mybatis/sqlmapper/*.xml"));
         return factoryBean.getObject();
     }
 
     @Primary
     @Bean(name = "sqlSession")
-    public SqlSessionTemplate sqlSessionProduct(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate sqlSession(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
         return sqlSessionTemplate;
     }

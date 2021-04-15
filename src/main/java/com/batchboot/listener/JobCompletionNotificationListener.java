@@ -3,17 +3,19 @@ package com.batchboot.listener;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+@Configuration
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
     StopWatch sw = new StopWatch();
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
+    	System.out.println("!!! JOB STARTED!");
         if (jobExecution.getStatus() == BatchStatus.STARTED) {
             //log.info("!!! JOB STARTED!");
         	System.out.println("!!! JOB STARTED!");

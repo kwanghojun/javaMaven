@@ -12,6 +12,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
@@ -30,28 +31,29 @@ public class ChunkBatchJob {
 
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
+		
+	@Bean(name="testLowChunkJob")
+	public Job testLowChunkJob(JobCompletionNotificationListener listener, Step stepChunk1) {
+		System.out.println("{testLowChunkJob}..Start..!");
+		Job reJob=jobBuilderFactory.get("testLowChunkJob")
+				.incrementer(new CurrentTimeIncrementer()).flow(stepChunk1).end().build();
+		System.out.println("{testLowChunkJob}..End..!");
+		return reJob;
+	}
 	
+
 	@Bean
 	public Step stepChunk1(
 			@Qualifier("myBatisPagingItemReader") MyBatisPagingItemReader myBatisPagingItemReader,
 			@Qualifier("myBatchProcess") ItemProcessor myBatchProcess,
 			@Qualifier("myBatisBatchItemWriter") MyBatisBatchItemWriter myBatisBatchItemWriter) {
 		System.out.println("{stepChunk1}..Start..!");
-		return stepBuilderFactory.get("stepChunk1").chunk(10).reader(myBatisPagingItemReader)
-				.processor(myBatchProcess).writer(myBatisBatchItemWriter).build();
+		return stepBuilderFactory.get("stepChunk1")
+				.<testLowDto,testLowDto>chunk(10)
+				.reader(myBatisPagingItemReader)
+				.processor(myBatchProcess)
+				.writer(myBatisBatchItemWriter).build();	
 	}
 	
-	@Bean("myBatchProcess")
-	//@StepScope
-	public ItemProcessor mySqlBatchProcess() {
-		return new ChunkTestItemProcessor();
-	}
-
-	@Bean(name="testLowChunkJob")
-	public Job testLowChunkJob(JobCompletionNotificationListener listener, Step stepChunk1) {
-		System.out.println("{testLowChunkJob}..Start..!");
-		return jobBuilderFactory.get("testLowChunkJob").incrementer(new CurrentTimeIncrementer())
-				.listener(listener).flow(stepChunk1).end().build();
-	}
 	
 }

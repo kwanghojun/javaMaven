@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;
+import org.mybatis.spring.batch.builder.MyBatisBatchItemWriterBuilder;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,11 +26,13 @@ import com.batchboot.dto.testLowDto;
 public class WriteConfiguration {
     
     @Bean(name ="myBatisBatchItemWriter")
-    public MyBatisBatchItemWriter<testLowDto> writer(@Qualifier("sqlSessionFactory")SqlSessionFactory sqlSessionFactory){
+	@StepScope
+    public MyBatisBatchItemWriter writer(@Qualifier("sqlSessionFactory")SqlSessionFactory sqlSessionFactory){
     	System.out.println("{MyBatisBatchItemWriter}..Start..!");
-        MyBatisBatchItemWriter<testLowDto> myBatisBatchItemWriter = new MyBatisBatchItemWriter<testLowDto>();
-        myBatisBatchItemWriter.setSqlSessionFactory(sqlSessionFactory);
-        myBatisBatchItemWriter.setStatementId("mybatis.testMapper.insertLowData2");
+        MyBatisBatchItemWriter<testLowDto> myBatisBatchItemWriter = new MyBatisBatchItemWriterBuilder<testLowDto>()
+        											.sqlSessionFactory(sqlSessionFactory)
+        											.statementId("mybatis.testMapper.insertLowData2")
+        											.build();
         System.out.println("{MyBatisBatchItemWriter}..End..!");
         return myBatisBatchItemWriter;
     }

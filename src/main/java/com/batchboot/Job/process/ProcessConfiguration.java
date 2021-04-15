@@ -10,6 +10,7 @@ import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
@@ -31,6 +32,7 @@ import com.batchboot.dto.testLowDto;
 public class ProcessConfiguration {
 	
 	@Bean(name="myBatchProcess")
+	@StepScope
 	public ItemProcessor myBatchProcess() {
 		System.out.println("{myBatchProcess}...Start.!");
 		return new ChunkTestItemProcessor();

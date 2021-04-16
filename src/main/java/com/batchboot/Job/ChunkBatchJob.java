@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 
 @Configuration
 @EnableBatchProcessing
@@ -31,7 +32,11 @@ public class ChunkBatchJob {
 
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
-		
+	
+	@Autowired
+	@Qualifier("nomalTaskPool")
+    public TaskExecutor nomalTaskPool;
+	
 	@Bean(name="testLowChunkJob")
 	public Job testLowChunkJob(JobCompletionNotificationListener listener, Step stepChunk1) {
 		System.out.println("{testLowChunkJob}..Start..!");
@@ -41,7 +46,7 @@ public class ChunkBatchJob {
 		return reJob;
 	}
 	
-
+	
 	@Bean
 	public Step stepChunk1(
 			@Qualifier("myBatisPagingItemReader") MyBatisPagingItemReader myBatisPagingItemReader,
@@ -49,10 +54,12 @@ public class ChunkBatchJob {
 			@Qualifier("myBatisBatchItemWriter") MyBatisBatchItemWriter myBatisBatchItemWriter) {
 		System.out.println("{stepChunk1}..Start..!");
 		return stepBuilderFactory.get("stepChunk1")
-				.<testLowDto,testLowDto>chunk(10)
+				.chunk(10)
 				.reader(myBatisPagingItemReader)
 				.processor(myBatchProcess)
-				.writer(myBatisBatchItemWriter).build();	
+				.writer(myBatisBatchItemWriter)
+				.taskExecutor(nomalTaskPool)
+				.build();	
 	}
 	
 	

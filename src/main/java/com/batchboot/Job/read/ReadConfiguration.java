@@ -13,6 +13,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;
 import org.mybatis.spring.batch.MyBatisPagingItemReader;
+import org.mybatis.spring.batch.MyBatisCursorItemReader;
 import org.mybatis.spring.batch.builder.MyBatisPagingItemReaderBuilder;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -61,7 +62,7 @@ public class ReadConfiguration {
         **/
     	MyBatisPagingItemReader<testLowDto> myBatisPagingItemReader= new MyBatisPagingItemReaderBuilder<testLowDto>()
         		.sqlSessionFactory(sqlSessionFactory)
-        		.queryId("mybatis.testMapper.selectLowData")
+        		.queryId("mybatis.testMapper.selectLowData2")
         		.parameterValues(new HashMap())
         		.pageSize(10)
         		.build();    	

@@ -16,6 +16,7 @@ public class testDao {
     private SqlSessionTemplate sqlSession;
 
     public List<Map> selectTest(Map<String, String> data) {
-        return this.sqlSession.selectList("selectTest", data);
+    	System.out.println("selectTest Dao..Start..!");
+        return this.sqlSession.selectList("mybatis.testMapper.selectLowData", data);
     }
 }

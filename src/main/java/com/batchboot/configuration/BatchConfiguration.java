@@ -8,13 +8,23 @@ import javax.sql.DataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.batchboot.Incrementer.CurrentTimeIncrementer;
 import com.batchboot.listener.ChunkExecutionListener;
@@ -23,88 +33,41 @@ import com.batchboot.listener.StepExecutionNotificationListener;
 
 import lombok.extern.slf4j.Slf4j;
 
-//@Slf4j
-//@Configuration
+@Configuration
+@EnableBatchProcessing
 public class BatchConfiguration extends DefaultBatchConfigurer {
-/*
-
-    @Autowired
-    public JobBuilderFactory jobBuilderFactory;
-
-    @Autowired
-    public StepBuilderFactory stepBuilderFactory;
-
-    @Autowired
-    public ADao aDao;
-
-    @Autowired
-    public BDao bDao;
-*/
-
-    /* (non-Javadoc)
-     * @see org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer#setDataSource(javax.sql.DataSource)
-     * 
-     * 스프링 배치에서 배치 정보를 저장하는 DB를 사용하지 않을려고 데이터 소스를 set 하는 부분을 주석 처리함
-     * 
-     */
-    @Override
-    public void setDataSource(DataSource dataSource) {
+	
+	
+	public int CORE_TASK_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+	public int MAX_TASK_POOL_SIZE = 128;
+	public int CHUNK_AND_PAGE_SIZE = 400;
+	
+	// This would reside in your BatchConfigurer implementation
+	@Autowired
+	@Qualifier("dbDatasource")
+	public DataSource dbDatasource;
+	
+	@Autowired
+	@Qualifier("aTX")
+	public PlatformTransactionManager transactionManager;
+	
+	@Override
+	protected JobRepository createJobRepository() throws Exception {
+	    JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
+	    factory.setDataSource(dbDatasource);
+	    factory.setIsolationLevelForCreate("ISOLATION_DEFAULT");
+	    factory.setTransactionManager(transactionManager);
+	    factory.setTablePrefix("BATCH_");
+	    factory.setMaxVarCharLength(1000);
+	    return factory.getObject();
+	}
+	
+	@Bean(name = "nomalTaskPool")
+    public TaskExecutor nomalTaskPool() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(CORE_TASK_POOL_SIZE);
+        executor.setMaxPoolSize(MAX_TASK_POOL_SIZE);
+        return executor;
     }
-
-    @Bean
-    public StepExecutionNotificationListener stepExecutionListener() {
-        return new StepExecutionNotificationListener();
-    }
-
-    @Bean
-    public ChunkExecutionListener chunkListener() {
-        return new ChunkExecutionListener();
-    }
-
-    @Bean
-    public JobCompletionNotificationListener jobExecutionListener() {
-        return new JobCompletionNotificationListener();
-    }
-    /*
-    @Bean
-    public Job importUserJob(JobCompletionNotificationListener listener, Step step1, Step step2) {
-        return jobBuilderFactory.get("testJob").incrementer(new CurrentTimeIncrementer()).listener(listener).flow(step1).next(step2).end().build();
-    }
-    
-    @Bean
-    public Step step1(Tasklet tasklet1) {
-        return stepBuilderFactory.get("step1").tasklet(tasklet1).build();
-    }
-    
-    @Bean
-    public Step step2(Tasklet tasklet2) {
-        return stepBuilderFactory.get("step2").tasklet(tasklet2).build();
-    }
-    
-   
-    @Bean
-    public Tasklet tasklet1() {
-        return (contribution, chunkContext)->{
-            Map<String, String> data = new HashMap<String, String>();
-            aDao.selectTest(data).forEach((test)->{
-                log.debug("adb "+test.toString());
-            });
-            
-            return RepeatStatus.FINISHED;
-        };
-    }
-    
-    
-    @Bean
-    public Tasklet tasklet2() {
-        return (contribution, chunkContext)->{
-            Map<String, String> data = new HashMap<String, String>();
-            bDao.selectTest(data).forEach((test)->{
-                log.debug("bdb "+test.toString());
-            });
-            
-            return RepeatStatus.FINISHED;
-        };
-    }
-    */
+ 
 }

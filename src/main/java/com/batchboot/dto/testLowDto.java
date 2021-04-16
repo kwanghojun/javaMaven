@@ -6,15 +6,23 @@ import lombok.ToString;
 
 @ToString
 public class testLowDto {
-		
+	
+	private int seqColumn;
     private String numseq;
     private String grp_id;
     private String col1;
     private String col2;
     private String col3;
     private String etc;
+    private String bigo;
     private String regdt;
     
+	public int getSeqColumn() {
+		return seqColumn;
+	}
+	public void setSeqColumn(int seqColumn) {
+		this.seqColumn = seqColumn;
+	}
 	public String getNumseq() {
 		return numseq;
 	}
@@ -51,12 +59,17 @@ public class testLowDto {
 	public void setEtc(String etc) {
 		this.etc = etc;
 	}
+	public String getBigo() {
+		return bigo;
+	}
+	public void setBigo(String bigo) {
+		this.bigo = bigo;
+	}
 	public String getRegdt() {
 		return regdt;
 	}
 	public void setRegdt(String regdt) {
 		this.regdt = regdt;
 	}
-    
-    
+        
 }

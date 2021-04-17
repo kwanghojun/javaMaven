@@ -1,4 +1,4 @@
-package com.batchboot.Job.write;
+package com.batchboot.Job.ChunkBatchJob.write;
 
 import javax.sql.DataSource;
 

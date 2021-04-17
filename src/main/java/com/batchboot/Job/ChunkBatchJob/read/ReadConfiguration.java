@@ -1,4 +1,4 @@
-package com.batchboot.Job.read;
+package com.batchboot.Job.ChunkBatchJob.read;
 
 import java.util.HashMap;
 import java.util.List;

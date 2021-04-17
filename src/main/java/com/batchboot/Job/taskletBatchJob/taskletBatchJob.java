@@ -1,7 +1,6 @@
-package com.batchboot.Job2;
+package com.batchboot.Job.taskletBatchJob;
 
 import com.batchboot.Incrementer.CurrentTimeIncrementer;
-import com.batchboot.Job.process.ChunkTestItemProcessor;
 import com.batchboot.dao.testDao;
 import com.batchboot.dto.testLowDto;
 import com.batchboot.listener.JobCompletionNotificationListener;

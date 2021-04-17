@@ -1,4 +1,4 @@
-package com.batchboot.Job.process;
+package com.batchboot.Job.ChunkBatchJob.process;
 
 import javax.sql.DataSource;
 
@@ -32,9 +32,16 @@ import com.batchboot.dto.testLowDto;
 public class ProcessConfiguration {
 	
 	@Bean(name="myBatchProcess")
-	@StepScope
-	public ItemProcessor myBatchProcess() {
-		System.out.println("{myBatchProcess}...Start.!");
+	public ItemProcessor<testLowDto, testLowDto> myBatchProcess() {
+		//System.out.println("{myBatchProcess}...Start.!");
 		return new ChunkTestItemProcessor();
+	}
+	
+	@Bean(name="myBatchProcess2")
+	public ItemProcessor<testLowDto,testLowDto> process(){
+		
+		return testdto -> {
+	        return testdto;
+	    };
 	}
 }

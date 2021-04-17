@@ -9,7 +9,7 @@ import org.springframework.util.StopWatch;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Configuration
+@Component
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
     StopWatch sw = new StopWatch();
 

@@ -1,4 +1,4 @@
-package com.batchboot.Job.process;
+package com.batchboot.Job.ChunkBatchJob.process;
 
 import java.util.Map;
 
@@ -17,15 +17,19 @@ public class ChunkTestItemProcessor implements ItemProcessor<testLowDto,testLowD
     @Override
     public testLowDto process(testLowDto dto) throws Exception {
     	processCnt+=1;
-    	System.out.println("{ChunkTestItemProcessor.process}...Count.["+processCnt+"]..dto..[]");
+    	//System.out.println("{ChunkTestItemProcessor.process}...Count.["+processCnt+"]..dto..[]");
     	if(dto !=null) {
     		//System.out.println(dto.toString());
     	} else {
-    		System.out.println("{ChunkTestItemProcessor.process}...dto null.!");
+    		System.out.println("{ChunkTestItemProcessor.process}...dto null.!"+dto.toString());
+    	}
+    	if(processCnt==15) {
+    		//Integer.parseInt("abc");
     	}
     	dto.setBigo("COPY-"+dto.getBigo().toUpperCase());
     	dto.setGrp_id(dto.getGrp_id().toUpperCase());
     	dto.setCol1("COPY-"+dto.getCol1().toUpperCase());
+    
         return dto;
     }
 

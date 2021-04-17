@@ -19,4 +19,9 @@ public class testDao {
     	System.out.println("selectTest Dao..Start..!");
         return this.sqlSession.selectList("mybatis.testMapper.selectLowData", data);
     }
+    
+    public int deleteLowDataCopy(Map<String, String> param) {    	
+    	System.out.println("deleteLowDataCopy Dao..Start..!");
+        return this.sqlSession.delete("mybatis.testMapper.deleteLowDataCopy",param);
+    }
 }

@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Built-By: kwang
-Build-Jdk: 15.0.1
-Implementation-Title: spring-boot-batch-mybatis
+Build-Jdk: 15.0.2
+Implementation-Title: javaMaven
 Implementation-Version: 0.1.0
-Implementation-Vendor-Id: com.github.sejoung
+Implementation-Vendor-Id: com.batchboot
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
- -starter-parent/spring-boot-batch-mybatis
+ -starter-parent/javaMaven
 Created-By: Maven Integration for Eclipse
 

@@ -16,5 +16,16 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
         assertTrue( true );
+        System.out.println("1111");
+    }
+    
+    /**
+     * Rigorous2 Test :-)
+     */
+    @Test
+    public void shouldAnswerWithTrue2()
+    {
+        assertTrue( true );
+        System.out.println("2222");
     }
 }

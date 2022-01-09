@@ -53,7 +53,7 @@ public class ExecutorTest {
 		makeRandomChar random=new makeRandomChar();
 		ParallelExecutorService paralExecutor=new ParallelExecutorService(seq);
 		List<String> jobList = List.of("job1","job2","job3");
-		int loopThread=3;
+		int loopThread=500;
 		for(int i=0; i < loopThread;i++) {
 			int setIdx=i+1;
 			paralExecutor.submit("job"+random.getRandomIdx2(3)); 

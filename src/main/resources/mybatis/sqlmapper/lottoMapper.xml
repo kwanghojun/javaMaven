@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.lottoMapper">
+  <select id="selectLotoList" resultType="com.batchboot.dto.lottoDto" parameterType="java.util.Map">
+    	SELECT lotto_turn
+    	       ,lotto_num1
+    	       ,lotto_num2
+    	       ,lotto_num3
+    	       ,lotto_num4
+    	       ,lotto_num5
+    	       ,lotto_num6
+    	       ,lotto_plus
+    		from LOTTO_LIST order by lotto_turn desc
+  </select>
+</mapper>
